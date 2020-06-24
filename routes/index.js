@@ -63,5 +63,14 @@ router.get('/delete-shop', function(req, res, next) {
    res.render('shop', {dataCardBikes:dataCardBikes} )
 });
 
+/* POST update-shop page. */
+router.post('/update-shop', function(req, res, next) {
+  var newQuantity = req.body.quantity
+  var i = req.body.number
+  dataCardBikes[i].quantity = newQuantity
+  res.render('shop', {dataCardBikes:dataCardBikes})
+});
+
+
 
 module.exports = router;

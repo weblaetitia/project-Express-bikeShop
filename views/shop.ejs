@@ -65,9 +65,10 @@
           <th scope="row"><%= i+1 %></th>
           <td> <img src="<%= dataCardBikes[i].photo %>" alt="<%= dataCardBikes[i].name %>" height="35"> </td>
           <td><%= dataCardBikes[i].name %></td>
-          <td><form class="form-inline flex-nowrap">
+          <td><form action="/update-shop" method="POST" class="form-inline flex-nowrap">
             <div class="form-group mr-sm-3">
-              <input type="text" class="form-control form-control-sm" placeholder="<%= dataCardBikes[i].quantity %>">
+              <input type="text" name="quantity" class="form-control form-control-sm" placeholder="<%= dataCardBikes[i].quantity %>">
+              <input type="hidden" name="number" value="<%= i %>">
             </div>
             <button type="submit" class="btn btn-sm btn-light btn-outline-info"><i class="fas fa-sync-alt"></i></button>
           </form>
