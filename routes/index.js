@@ -55,8 +55,11 @@ router.get('/', function(req, res, next) {
 
 /* GET shopping-cart page. */
 router.get('/cart', function(req, res, next) {
-  var exist = false;
-  if ((req.session.dataCardBikes.length === 0) && (req.query)) {
+  if (Object.entries(req.query).length === 0) {
+    res.render('cart', {dataCardBikes:req.session.dataCardBikes})
+  } else {
+    var exist = false;
+  if (req.session.dataCardBikes.length === 0) {
     req.session.dataCardBikes.push(req.query)
   } else {
     req.session.dataCardBikes.forEach(element => {
@@ -71,7 +74,10 @@ router.get('/cart', function(req, res, next) {
       req.session.dataCardBikes.push(req.query)
     }
   }
-  res.render('cart', {dataCardBikes:req.session.dataCardBikes} )
+  res.render('cart', {dataCardBikes:req.session.dataCardBikes})
+  }
+
+  
 });
 
 /* GET delete-shop page. */
