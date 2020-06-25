@@ -18,16 +18,19 @@
 
 
   <nav class="navbar navbar-light bg-dark">
-        <a class="navbar-brand text-light text-left" href="./">
-            <img src="/images/bike-logo.svg" width="30" height="30" class="d-inline-block align-top" alt="Logo The Bike Shop Experience" loading="lazy">
-            The Bike Shop Experience
-          </a>
+    <div class="container">
+      <a class="navbar-brand text-light text-left" href="./">
+        <img src="/images/bike-logo.svg" width="30" height="30" class="d-inline-block align-top" alt="Logo The Bike Shop Experience" loading="lazy">
+        The Bike Shop Experience
+      </a>
+      <a href="/cart" class="btn btn-outline-info my-2 my-sm-0" type="submit">My Cart<i class="fas fa-shopping-cart fa-xs ml-2"></i></a>
+    </div>
   </nav>
 
   <div id="picture-header" class="jumbotron jumbotron-fluid">
     <div class="container">
-      <h1 class="display-4 text-white">The Bike Shop Experience (generated dynamically)</h1>
-      <p class="lead text-white">An entire JS bike shop.</p>
+      <h1 class="display-4 text-white">The Bike Shop Experience</h1>
+      <p class="lead text-white">An entire JS bike shop made with NodeJS + Express.</p>
     </div>
   </div>
 
@@ -43,7 +46,7 @@
                     <h5 class="card-title"><%= dataBikes[i].name %></h5>
                     <div class="row justify-content-center align-items-center">
                         <p class="card-text mb-0"><%= dataBikes[i].price %> €</p>
-                        <a href="./shop?name=<%= dataBikes[i].name %>&price=<%= dataBikes[i].price %>&photo=<%= dataBikes[i].photo %>&quantity=1" class="btn ml-2 btn-large btn-outline-info btn-light">Buy</a>
+                        <a href="./cart?name=<%= dataBikes[i].name %>&price=<%= dataBikes[i].price %>&photo=<%= dataBikes[i].photo %>&quantity=1" class="btn ml-2 btn-large btn-outline-info btn-light">Buy</a>
                     </div>
                 </div>
             </div>

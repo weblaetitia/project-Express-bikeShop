@@ -51,24 +51,24 @@ router.get('/', function(req, res, next) {
 dataCardBikes = [];
 
 /* GET shopping-cart page. */
-router.get('/shop', function(req, res, next) {
+router.get('/cart', function(req, res, next) {
   dataCardBikes.push(req.query)
-  res.render('shop', {dataCardBikes:dataCardBikes} )
+  res.render('cart', {dataCardBikes:dataCardBikes} )
 });
 
 /* GET delete-shop page. */
-router.get('/delete-shop', function(req, res, next) {
+router.get('/delete-cart', function(req, res, next) {
    var objectToDelete = req.query.delete
    dataCardBikes.splice(objectToDelete,1)
-   res.render('shop', {dataCardBikes:dataCardBikes} )
+   res.render('cart', {dataCardBikes:dataCardBikes} )
 });
 
 /* POST update-shop page. */
-router.post('/update-shop', function(req, res, next) {
+router.post('/update-cart', function(req, res, next) {
   var newQuantity = req.body.quantity
   var i = req.body.number
   dataCardBikes[i].quantity = newQuantity
-  res.render('shop', {dataCardBikes:dataCardBikes})
+  res.render('cart', {dataCardBikes:dataCardBikes})
 });
 
 
