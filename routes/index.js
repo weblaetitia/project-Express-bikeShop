@@ -44,31 +44,49 @@ var dataBikes = [
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+  // Initialisez la variable de session dataCardBikes
+  console.log(req.session.dataCardBikes)
+  if (req.session.dataCardBikes === undefined) {
+    req.session.dataCardBikes =[];
+  }
   res.render('index', {dataBikes:dataBikes});
 });
 
-// Mon panier
-dataCardBikes = [];
 
 /* GET shopping-cart page. */
 router.get('/cart', function(req, res, next) {
-  dataCardBikes.push(req.query)
-  res.render('cart', {dataCardBikes:dataCardBikes} )
+  var exist = false;
+  if ((req.session.dataCardBikes.length === 0) && (req.query)) {
+    req.session.dataCardBikes.push(req.query)
+  } else {
+    req.session.dataCardBikes.forEach(element => {
+      console.log(element.name)
+      console.log(req.query.name)
+      if (element.name === req.query.name) {
+        element.quantity++
+        exist = true
+      }
+    })
+    if (exist === false) {
+      req.session.dataCardBikes.push(req.query)
+    }
+  }
+  res.render('cart', {dataCardBikes:req.session.dataCardBikes} )
 });
 
 /* GET delete-shop page. */
 router.get('/delete-cart', function(req, res, next) {
    var objectToDelete = req.query.delete
-   dataCardBikes.splice(objectToDelete,1)
-   res.render('cart', {dataCardBikes:dataCardBikes} )
+   req.session.dataCardBikes.splice(objectToDelete,1)
+   res.render('cart', {dataCardBikes:req.session.dataCardBikes} )
 });
 
 /* POST update-shop page. */
 router.post('/update-cart', function(req, res, next) {
   var newQuantity = req.body.quantity
   var i = req.body.number
-  dataCardBikes[i].quantity = newQuantity
-  res.render('cart', {dataCardBikes:dataCardBikes})
+  req.session.dataCardBikes[i].quantity = newQuantity
+  res.render('cart', {dataCardBikes:req.session.dataCardBikes})
 });
 
 

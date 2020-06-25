@@ -9,6 +9,15 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
+var session = require('express-session');
+
+// session set-up
+app.use(session({
+  secret: '8B4D97CA43FB8959C41B23529E186',
+  resave: false,
+  saveUninitialized : false
+}))
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');

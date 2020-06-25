@@ -42,7 +42,16 @@
   <h1>Shopping cart</h1>
 </div>
 
-<!-- Table -->
+
+<% if(dataCardBikes.length == 0) { %>
+  <div class="container my-4">
+    <div class="alert alert-info" role="alert">
+      Your shopping cart is empty.
+    </div>
+  </div>
+<% } else { %>
+  
+  <!-- Table -->
 <div class="container">
   <div class="table-responsive-md">
     <table class="table table-hover">
@@ -59,6 +68,7 @@
       </thead>
       <tbody>
         <!-- ligne velo   -->
+        
         <% 
             var total = 0;
             for (var i=0; i<dataCardBikes.length; i++) { 
@@ -100,13 +110,17 @@
     </table>
   </div>
 </div>
-
 <!-- checkout -->
 <div class="container">
   <div class="row justify-content-end"><p class="">
     <a href="#" class="btn btn-light btn-outline-info mr-4">Checkout</a>
   </p></div>
 </div>
+
+<% } %>
+
+
+
 
 
 
