@@ -100,7 +100,6 @@ router.get('/cart', async function(req, res, next) {
     }
   );
   const sessionStripeID = session.id
-  console.log(sessionStripeID)
   res.render('cart', { dataCardBikes:req.session.dataCardBikes, sessionStripeID:sessionStripeID })
   }
 });
@@ -125,12 +124,14 @@ router.post('/update-cart', function(req, res, next) {
 
 /* GET SUCCESS page. */
 router.get('/success', function(req, res) {
-  res.render('confirm', {success1:success})
+  var successMsg = 'Your order as been successfully sent.'
+  res.locals.successMsg = successMsg
+  res.render('confirm')
 });
 
 /* GET CANCEL page. */
 router.get('/cancel', function(req, res) {
-  res.render('confirm', {cancel1:cancel})
+  res.render('index', {dataBikes:dataBikes});
 });
 
 
