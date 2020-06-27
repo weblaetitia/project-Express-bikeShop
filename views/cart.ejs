@@ -43,6 +43,21 @@
 </div>
 
 
+
+<% if (locals.cancellMsg) { %>
+
+  <div class="container my-4">
+    <div class="alert alert-warning" role="alert">
+      <%= cancellMsg %>
+    </div>
+  </div>
+ 
+ <% } %>
+ 
+ 
+
+
+
 <% if(dataCardBikes.length == 0) { %>
   <div class="container my-4">
     <div class="alert alert-info" role="alert">

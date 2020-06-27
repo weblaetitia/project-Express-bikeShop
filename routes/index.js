@@ -133,7 +133,9 @@ router.get('/success', function(req, res) {
 
 /* GET CANCEL page. */
 router.get('/cancel', function(req, res) {
-  res.render('index', {dataBikes:dataBikes});
+  var cancellMsg = 'Payment as been cancelled.'
+  res.locals.cancellMsg = cancellMsg
+  res.render('cart', {dataCardBikes:req.session.dataCardBikes});
 });
 
 
