@@ -126,6 +126,8 @@ router.get('/checkout', async function(req, res) {
 
 /* GET SUCCESS page. */
 router.get('/success', function(req, res) {
+  dataCardBikes = []
+  req.session.dataCardBikes = []
   var successMsg = 'Your order as been successfully sent.'
   res.locals.successMsg = successMsg
   res.render('confirm')
