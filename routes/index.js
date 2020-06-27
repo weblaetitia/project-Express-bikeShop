@@ -73,30 +73,7 @@ router.get('/cart', async function(req, res, next) {
         req.session.dataCardBikes.push(req.query)
       }
     }
-  // stripe
-  // changer le tableau req.session.dataCardBikes
-  var checkoutItems = [];
-  req.session.dataCardBikes.forEach(element => {
-    checkoutItems.push({
-      name : element.name,
-      amount : element.price*100,
-      currency : 'eur',
-      quantity : element.quantity
-    })
-  });
-  var sessionStripeID;
-  var stripe = require('stripe')('sk_test_51GyDhJKxXt7jTvFxfe16LN0M8iZ525STjmudKWslz9TEU4T1wTRsRZjVIOWQB1uoCPMV5xAJUlQZnOrAg7KzuC5x00kjVBGeuP');
-  const session = await stripe.checkout.sessions.create(
-    {
-      success_url: 'http://localhost:3000/success?session_id={CHECKOUT_SESSION_ID}',
-      cancel_url: 'http://localhost:3000/cancel',
-      payment_method_types: ['card'],
-      line_items: checkoutItems,
-      mode: 'payment',
-    }
-  );
-  sessionStripeID = session.id
-  res.render('cart', { dataCardBikes:req.session.dataCardBikes, sessionStripeID:sessionStripeID })
+  res.render('cart', { dataCardBikes:req.session.dataCardBikes })
 });
 
 
@@ -105,30 +82,7 @@ router.get('/cart', async function(req, res, next) {
 router.get('/delete-cart', async function(req, res, next) {
    var objectToDelete = req.query.delete
    req.session.dataCardBikes.splice(objectToDelete,1)
-   // stripe
-  // changer le tableau req.session.dataCardBikes
-  var checkoutItems = [];
-  req.session.dataCardBikes.forEach(element => {
-    checkoutItems.push({
-      name : element.name,
-      amount : element.price*100,
-      currency : 'eur',
-      quantity : element.quantity
-    })
-  });
-  var sessionStripeID;
-  var stripe = require('stripe')('sk_test_51GyDhJKxXt7jTvFxfe16LN0M8iZ525STjmudKWslz9TEU4T1wTRsRZjVIOWQB1uoCPMV5xAJUlQZnOrAg7KzuC5x00kjVBGeuP');
-  const session = await stripe.checkout.sessions.create(
-    {
-      success_url: 'http://localhost:3000/success?session_id={CHECKOUT_SESSION_ID}',
-      cancel_url: 'http://localhost:3000/cancel',
-      payment_method_types: ['card'],
-      line_items: checkoutItems,
-      mode: 'payment',
-    }
-  );
-  sessionStripeID = session.id
-  res.render('cart', { dataCardBikes:req.session.dataCardBikes, sessionStripeID:sessionStripeID })
+  res.render('cart', { dataCardBikes:req.session.dataCardBikes })
 });
 
 /* POST update-shop page. */
@@ -136,8 +90,11 @@ router.post('/update-cart', async function(req, res, next) {
   var newQuantity = req.body.quantity
   var i = req.body.number
   req.session.dataCardBikes[i].quantity = newQuantity
-  // stripe
-  // changer le tableau req.session.dataCardBikes
+  res.render('cart', { dataCardBikes:req.session.dataCardBikes})
+});
+
+/* GET checkout page */
+router.get('/checkout', async function(req, res) {
   var checkoutItems = [];
   req.session.dataCardBikes.forEach(element => {
     checkoutItems.push({
@@ -159,9 +116,9 @@ router.post('/update-cart', async function(req, res, next) {
     }
   );
   sessionStripeID = session.id
-  res.render('cart', { dataCardBikes:req.session.dataCardBikes, sessionStripeID:sessionStripeID })
-});
+  res.render('checkout', {sessionStripeID:sessionStripeID});
 
+})
 
 /* GET SUCCESS page. */
 router.get('/success', function(req, res) {
