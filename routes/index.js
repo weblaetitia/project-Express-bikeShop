@@ -1,6 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
+require('dotenv').config();
+var stripePrivateKey = process.env.STRIPE_PRIVATE_KEY
+
 // My bikes
 var dataBikes = [
   {
@@ -109,7 +112,7 @@ router.get('/checkout', async function(req, res) {
     })
   });
   var sessionStripeID;
-  var stripe = require('stripe')('sk_test_51GyDhJKxXt7jTvFxfe16LN0M8iZ525STjmudKWslz9TEU4T1wTRsRZjVIOWQB1uoCPMV5xAJUlQZnOrAg7KzuC5x00kjVBGeuP');
+  var stripe = require('stripe')(stripePrivateKey);
   const session = await stripe.checkout.sessions.create(
     {
       success_url: 'http://localhost:3000/success?session_id={CHECKOUT_SESSION_ID}',
