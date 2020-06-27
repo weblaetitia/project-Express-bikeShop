@@ -80,13 +80,12 @@ router.get('/cart', async function(req, res, next) {
   // changer le tableau req.session.dataCardBikes
   var checkoutItems = [];
   req.session.dataCardBikes.forEach(element => {
-    var item = {
+    checkoutItems.push({
       name : element.name,
       amount : element.price*100,
       currency : 'eur',
       quantity : element.quantity
-    }
-    checkoutItems.push(item)
+    })
   });
   
   var stripe = require('stripe')('sk_test_51GyDhJKxXt7jTvFxfe16LN0M8iZ525STjmudKWslz9TEU4T1wTRsRZjVIOWQB1uoCPMV5xAJUlQZnOrAg7KzuC5x00kjVBGeuP');
