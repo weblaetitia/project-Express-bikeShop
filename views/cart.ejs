@@ -78,6 +78,7 @@
           <th scope="col">Quantity</th>
           <th scope="col">Price</th>
           <th scope="col">Total</th>
+          <th scope="col">Shipping cost</th>
           <th scope="col">Delete</th>
         </tr>
       </thead>
@@ -85,9 +86,7 @@
         <!-- ligne velo   -->
         
         <% 
-            var total = 0;
             for (var i=0; i<dataCardBikes.length; i++) { 
-            total += dataCardBikes[i].quantity * dataCardBikes[i].price;
         %>
         <tr>
           <th scope="row"><%= i+1 %></th>
@@ -103,33 +102,36 @@
           </td>
           <td><%= dataCardBikes[i].price %>&nbsp;€</td>
           <td><%= dataCardBikes[i].price * dataCardBikes[i].quantity %>&nbsp;€</td>
-          <td><a href="/delete-cart?delete=<%= i %>" class="btn btn-light btn-outline-info btn-sm"><i class="far fa-trash-alt"></i></a></td>
+          <td>0&nbsp;€</td>
+          <td><a href="/delete-cart?delete=<%= i %>" class="btn btn-light btn-outline-info btn-sm">
+            <i class="far fa-trash-alt"></i>
+            </a></td>
         </tr>
         <% 
             } 
         %>
         <!-- fin ligne velo   -->    
-        
-        <tfoot>
-          <tr>
-            <th></th>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>Total Basket:</td>
-            <td><%= total %>&nbsp;€</td>
-            <td></td>
-          </tr>
-        </tfoot>
       </tbody>
     </table>
   </div>
 </div>
-<!-- checkout -->
 <div class="container">
-  <div class="row justify-content-end"><p class="">
-    <a href="/checkout" id="checkout-btn" class="btn btn-light btn-outline-info mr-4">Checkout</a>
-  </p></div>
+
+  <div class="row align-items-center">
+    <div class="flex-grow-1">
+      <p class="text-right h3">Total Basket: <%= locals.total %>&nbsp;€ – Shipping cost: <%= shippingCost %>&nbsp;€</p>
+    </div>
+    <div class="px-4"><a href="/checkout" id="checkout-btn" class="btn btn-light btn-outline-info mr-4">Checkout</a></div>
+  </div>
+  
+  <% if (locals.promo != undefined) { %>  
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="alert alert-info" role="alert"><%= promo %></div>
+    </div>
+  </div>
+  <% } %>
+
 </div>
 
 <% } %>

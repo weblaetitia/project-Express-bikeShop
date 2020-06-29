@@ -44,6 +44,9 @@ var dataBikes = [
   }
 ];
 
+var total = 0;
+
+
 var success = {
   text : 'Your order as been successfully sent.'
 }
@@ -56,14 +59,41 @@ router.get('/', function(req, res, next) {
   if (req.session.dataCardBikes === undefined) {
     req.session.dataCardBikes =[];
   }
+  if (req.session.shippingcost === undefined) {
+    req.session.shippingCost = 0;
+  }
   res.render('index', {dataBikes:dataBikes});
 });
 
 
 /* GET shopping-cart page. */
 router.get('/cart', async function(req, res, next) {
+  // calculate shipping cost
+  var total = 0;
+  var nbrOfBikes = req.session.dataCardBikes.length
+  req.session.dataCardBikes.forEach(element => {
+    if (element.quantity >= 1) {
+      nbrOfBikes += element.quantity -1
+    }
+  })
+
+  if (nbrOfBikes == 1) {
+    req.session.shippingCost = 30
+  } else {
+    req.session.dataCardBikes.forEach(velo => {
+      total +=  parseInt(velo.quantity) * parseInt(velo.price)
+    });
+    if (total < 2000) {
+      req.session.shippingCost = 30 * nbrOfBikes
+    } else if ((total >= 2000) && (total < 4000)) {
+      req.session.shippingCost = 15 * nbrOfBikes
+    } else if (total >= 4000) {
+      req.session.shippingCost = 0
+      var promo = 'Shipping cost free'
+    }
+  }
   if (Object.entries(req.query).length === 0) {
-  res.render('cart', { dataCardBikes:req.session.dataCardBikes })
+    res.render('cart', {dataCardBikes:req.session.dataCardBikes, total:total, shippingCost:req.session.shippingCost, promo:promo})
 } else {
   var exist = false;
   if (req.session.dataCardBikes.length === 0) {
@@ -79,7 +109,31 @@ router.get('/cart', async function(req, res, next) {
         req.session.dataCardBikes.push(req.query)
       }
     }
-  res.render('cart', { dataCardBikes:req.session.dataCardBikes })
+    // calculate shipping cost
+    var total = 0;
+    var nbrOfBikes = req.session.dataCardBikes.length
+    req.session.dataCardBikes.forEach(element => {
+      if (element.quantity >= 1) {
+        nbrOfBikes += element.quantity -1
+      }
+    })
+
+    if (nbrOfBikes == 1) {
+      req.session.shippingCost = 30
+    } else {
+      req.session.dataCardBikes.forEach(velo => {
+        total +=  parseInt(velo.quantity) * parseInt(velo.price)
+      });
+      if (total < 2000) {
+        req.session.shippingCost = 30 * nbrOfBikes
+      } else if ((total >= 2000) && (total < 4000)) {
+        req.session.shippingCost = 15 * nbrOfBikes
+      } else if (total >= 4000) {
+        req.session.shippingCost = 0
+        var promo = 'Shipping cost free'
+      }
+    }
+  res.render('cart', {dataCardBikes:req.session.dataCardBikes, total:total, shippingCost:req.session.shippingCost, promo:promo})
 }
 });
 
@@ -89,16 +143,66 @@ router.get('/cart', async function(req, res, next) {
 router.get('/delete-cart', async function(req, res, next) {
    var objectToDelete = req.query.delete
    req.session.dataCardBikes.splice(objectToDelete,1)
-  res.render('cart', { dataCardBikes:req.session.dataCardBikes })
-});
+
+    // calculate shipping cost
+    var total = 0;
+    var nbrOfBikes = req.session.dataCardBikes.length
+    req.session.dataCardBikes.forEach(element => {
+      if (element.quantity >= 1) {
+        nbrOfBikes += element.quantity -1
+      }
+    })
+
+    if (nbrOfBikes == 1) {
+      req.session.shippingCost = 30
+    } else {
+      req.session.dataCardBikes.forEach(velo => {
+        total +=  parseInt(velo.quantity) * parseInt(velo.price)
+      });
+      if (total < 2000) {
+        req.session.shippingCost = 30 * nbrOfBikes
+      } else if ((total >= 2000) && (total < 4000)) {
+        req.session.shippingCost = 15 * nbrOfBikes
+      } else if (total >= 4000) {
+        req.session.shippingCost = 0
+        var promo = 'Shipping cost free'
+      }
+    }
+    res.render('cart', {dataCardBikes:req.session.dataCardBikes, total:total, shippingCost:req.session.shippingCost, promo:promo})
+  });
 
 /* POST update-shop page. */
 router.post('/update-cart', async function(req, res, next) {
   var newQuantity = req.body.quantity
   var i = req.body.number
   req.session.dataCardBikes[i].quantity = newQuantity
-  res.render('cart', { dataCardBikes:req.session.dataCardBikes})
-});
+
+    // calculate shipping cost
+    var total = 0;
+    var nbrOfBikes = req.session.dataCardBikes.length
+    req.session.dataCardBikes.forEach(element => {
+      if (element.quantity >= 1) {
+        nbrOfBikes += element.quantity -1
+      }
+    })
+
+    if (nbrOfBikes == 1) {
+      req.session.shippingCost = 30
+    } else {
+      req.session.dataCardBikes.forEach(velo => {
+        total +=  parseInt(velo.quantity) * parseInt(velo.price)
+      });
+      if (total < 2000) {
+        req.session.shippingCost = 30 * nbrOfBikes
+      } else if ((total >= 2000) && (total < 4000)) {
+        req.session.shippingCost = 15 * nbrOfBikes
+      } else if (total >= 4000) {
+        req.session.shippingCost = 0
+        var promo = 'Shipping cost free'
+      }
+    }
+    res.render('cart', {dataCardBikes:req.session.dataCardBikes, total:total, shippingCost:req.session.shippingCost, promo:promo})
+  });
 
 /* GET checkout page */
 router.get('/checkout', async function(req, res) {
