@@ -44,7 +44,37 @@ var dataBikes = [
   }
 ];
 
-var total = 0;
+
+var calculateTotal = (bikesArray) => {
+  var totalCart = 0
+  bikesArray.forEach(velo => {
+    totalCart +=  parseInt(velo.quantity) * parseInt(velo.price)
+  })
+  return totalCart
+}
+
+var calculateShippingCost = (bikesArray) => {
+  total = calculateTotal(bikesArray)
+  var shippingCost = 0
+  var nbrOfBikes = bikesArray.length
+  bikesArray.forEach(element => {
+    if (element.quantity >= 1) {
+      nbrOfBikes += element.quantity -1
+    }
+  })
+  if (nbrOfBikes == 1) {
+    shippingCost = 30
+  } else {
+      if (total < 2000) {
+      shippingCost = 30 * nbrOfBikes
+    } else if ((total >= 2000) && (total < 4000)) {
+      shippingCost = 15 * nbrOfBikes
+    } else if (total >= 4000) {
+      shippingCost = 0
+    }
+  }
+  return shippingCost
+}
 
 
 var success = {
@@ -67,33 +97,11 @@ router.get('/', function(req, res, next) {
 
 
 /* GET shopping-cart page. */
-router.get('/cart', async function(req, res, next) {
-  // calculate shipping cost
-  var total = 0;
-  var nbrOfBikes = req.session.dataCardBikes.length
-  req.session.dataCardBikes.forEach(element => {
-    if (element.quantity >= 1) {
-      nbrOfBikes += element.quantity -1
-    }
-  })
-
-  if (nbrOfBikes == 1) {
-    req.session.shippingCost = 30
-  } else {
-    req.session.dataCardBikes.forEach(velo => {
-      total +=  parseInt(velo.quantity) * parseInt(velo.price)
-    });
-    if (total < 2000) {
-      req.session.shippingCost = 30 * nbrOfBikes
-    } else if ((total >= 2000) && (total < 4000)) {
-      req.session.shippingCost = 15 * nbrOfBikes
-    } else if (total >= 4000) {
-      req.session.shippingCost = 0
-      var promo = 'Shipping cost free'
-    }
-  }
+router.get('/cart', function(req, res, next) {
   if (Object.entries(req.query).length === 0) {
-    res.render('cart', {dataCardBikes:req.session.dataCardBikes, total:total, shippingCost:req.session.shippingCost, promo:promo})
+    total = calculateTotal(req.session.dataCardBikes)  
+    req.session.shippingCost = calculateShippingCost(req.session.dataCardBikes)
+    res.render('cart', {dataCardBikes:req.session.dataCardBikes, shippingCost:req.session.shippingCost, total:total})
 } else {
   var exist = false;
   if (req.session.dataCardBikes.length === 0) {
@@ -109,31 +117,9 @@ router.get('/cart', async function(req, res, next) {
         req.session.dataCardBikes.push(req.query)
       }
     }
-    // calculate shipping cost
-    var total = 0;
-    var nbrOfBikes = req.session.dataCardBikes.length
-    req.session.dataCardBikes.forEach(element => {
-      if (element.quantity >= 1) {
-        nbrOfBikes += element.quantity -1
-      }
-    })
-
-    if (nbrOfBikes == 1) {
-      req.session.shippingCost = 30
-    } else {
-      req.session.dataCardBikes.forEach(velo => {
-        total +=  parseInt(velo.quantity) * parseInt(velo.price)
-      });
-      if (total < 2000) {
-        req.session.shippingCost = 30 * nbrOfBikes
-      } else if ((total >= 2000) && (total < 4000)) {
-        req.session.shippingCost = 15 * nbrOfBikes
-      } else if (total >= 4000) {
-        req.session.shippingCost = 0
-        var promo = 'Shipping cost free'
-      }
-    }
-  res.render('cart', {dataCardBikes:req.session.dataCardBikes, total:total, shippingCost:req.session.shippingCost, promo:promo})
+  total = calculateTotal(req.session.dataCardBikes)  
+  req.session.shippingCost = calculateShippingCost(req.session.dataCardBikes)
+  res.render('cart', {dataCardBikes:req.session.dataCardBikes, shippingCost:req.session.shippingCost, total:total})
 }
 });
 
@@ -144,31 +130,9 @@ router.get('/delete-cart', async function(req, res, next) {
    var objectToDelete = req.query.delete
    req.session.dataCardBikes.splice(objectToDelete,1)
 
-    // calculate shipping cost
-    var total = 0;
-    var nbrOfBikes = req.session.dataCardBikes.length
-    req.session.dataCardBikes.forEach(element => {
-      if (element.quantity >= 1) {
-        nbrOfBikes += element.quantity -1
-      }
-    })
-
-    if (nbrOfBikes == 1) {
-      req.session.shippingCost = 30
-    } else {
-      req.session.dataCardBikes.forEach(velo => {
-        total +=  parseInt(velo.quantity) * parseInt(velo.price)
-      });
-      if (total < 2000) {
-        req.session.shippingCost = 30 * nbrOfBikes
-      } else if ((total >= 2000) && (total < 4000)) {
-        req.session.shippingCost = 15 * nbrOfBikes
-      } else if (total >= 4000) {
-        req.session.shippingCost = 0
-        var promo = 'Shipping cost free'
-      }
-    }
-    res.render('cart', {dataCardBikes:req.session.dataCardBikes, total:total, shippingCost:req.session.shippingCost, promo:promo})
+   total = calculateTotal(req.session.dataCardBikes)  
+   req.session.shippingCost = calculateShippingCost(req.session.dataCardBikes)
+   res.render('cart', {dataCardBikes:req.session.dataCardBikes, shippingCost:req.session.shippingCost, total:total})
   });
 
 /* POST update-shop page. */
@@ -177,31 +141,9 @@ router.post('/update-cart', async function(req, res, next) {
   var i = req.body.number
   req.session.dataCardBikes[i].quantity = newQuantity
 
-    // calculate shipping cost
-    var total = 0;
-    var nbrOfBikes = req.session.dataCardBikes.length
-    req.session.dataCardBikes.forEach(element => {
-      if (element.quantity >= 1) {
-        nbrOfBikes += element.quantity -1
-      }
-    })
-
-    if (nbrOfBikes == 1) {
-      req.session.shippingCost = 30
-    } else {
-      req.session.dataCardBikes.forEach(velo => {
-        total +=  parseInt(velo.quantity) * parseInt(velo.price)
-      });
-      if (total < 2000) {
-        req.session.shippingCost = 30 * nbrOfBikes
-      } else if ((total >= 2000) && (total < 4000)) {
-        req.session.shippingCost = 15 * nbrOfBikes
-      } else if (total >= 4000) {
-        req.session.shippingCost = 0
-        var promo = 'Shipping cost free'
-      }
-    }
-    res.render('cart', {dataCardBikes:req.session.dataCardBikes, total:total, shippingCost:req.session.shippingCost, promo:promo})
+  total = calculateTotal(req.session.dataCardBikes)  
+  req.session.shippingCost = calculateShippingCost(req.session.dataCardBikes)
+  res.render('cart', {dataCardBikes:req.session.dataCardBikes, shippingCost:req.session.shippingCost, total:total})
   });
 
 /* GET checkout page */
@@ -219,8 +161,8 @@ router.get('/checkout', async function(req, res) {
   var stripe = require('stripe')(stripePrivateKey);
   const session = await stripe.checkout.sessions.create(
     {
-      success_url: 'https://bike-shop-experience.herokuapp.com/success?session_id={CHECKOUT_SESSION_ID}',
-      cancel_url: 'https://bike-shop-experience.herokuapp.com/cancel',
+      success_url: 'localhost:3000/success?session_id={CHECKOUT_SESSION_ID}',
+      cancel_url: 'localhost:3000/cancel',
       payment_method_types: ['card'],
       line_items: checkoutItems,
       mode: 'payment',
