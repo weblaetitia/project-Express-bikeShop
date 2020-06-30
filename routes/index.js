@@ -161,8 +161,8 @@ router.get('/checkout', async function(req, res) {
   var stripe = require('stripe')(stripePrivateKey);
   const session = await stripe.checkout.sessions.create(
     {
-      success_url: 'localhost:3000/success?session_id={CHECKOUT_SESSION_ID}',
-      cancel_url: 'localhost:3000/cancel',
+      success_url: 'http://localhost:3000/success?session_id={CHECKOUT_SESSION_ID}',
+      cancel_url: 'http://localhost:3000/cancel',
       payment_method_types: ['card'],
       line_items: checkoutItems,
       mode: 'payment',
