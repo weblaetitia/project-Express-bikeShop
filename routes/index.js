@@ -157,6 +157,12 @@ router.get('/checkout', async function(req, res) {
       quantity : element.quantity
     })
   });
+  checkoutItems.push( {
+    name : 'Shipping cost',
+    amount : req.session.shippingCost * 100,
+    currency : 'eur',
+    quantity :1
+  })
   var sessionStripeID;
   var stripe = require('stripe')(stripePrivateKey);
   const session = await stripe.checkout.sessions.create(
