@@ -114,9 +114,28 @@
 
   <div class="row align-items-center">
     <div class="flex-grow-1">
-      <p class="text-right h3">Total Basket: <%= locals.total %>&nbsp;€ – Shipping cost: <%= shippingCost %>&nbsp;€</p>
+      <p class="text-right h4">Total Basket: <%= locals.total %>&nbsp;€ – Shipping cost: <%= shippingCost %>&nbsp;€</p>
     </div>
     <div class="px-4"><a href="/checkout" id="checkout-btn" class="btn btn-light btn-outline-info mr-4">Checkout</a></div>
+  </div>
+
+  <div class="row mt-4 flex-column">
+      <h2>Choose shipping options</h2>
+
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="standard" id="standard" value="option1" checked>
+        <label class="form-check-label" for="standard">Standard</label>
+      </div>
+
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="express" id="express" value="option1">
+        <label class="form-check-label" for="express">Express (+ €100 extra fees)</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="relay" id="relay" value="option1">
+        <label class="form-check-label" for="relay">Relay (€50 fees + €20 per product)</label>
+      </div>
+      
   </div>
   
   <% if (total >= 4000) { %>  
