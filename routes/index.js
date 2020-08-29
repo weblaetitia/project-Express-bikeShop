@@ -192,7 +192,7 @@ router.get('/success', function(req, res) {
 router.get('/cancel', function(req, res) {
   var cancellMsg = 'Payment as been cancelled.'
   res.locals.cancellMsg = cancellMsg
-  res.render('cart', {dataCardBikes:req.session.dataCardBikes});
+  res.render('cart', {dataCardBikes:req.session.dataCardBikes, shippingCost:req.session.shippingCost, total:total});
 });
 
 
