@@ -3,6 +3,7 @@ var router = express.Router();
 
 require('dotenv').config();
 var stripePrivateKey = process.env.STRIPE_PRIVATE_KEY
+var baseUrl = process.env.BASE_URL
 
 // My bikes
 var dataBikes = [
@@ -167,8 +168,8 @@ router.get('/checkout', async function(req, res) {
   var stripe = require('stripe')(stripePrivateKey);
   const session = await stripe.checkout.sessions.create(
     {
-      success_url: 'http://localhost:3000/success?session_id={CHECKOUT_SESSION_ID}',
-      cancel_url: 'http://localhost:3000/cancel',
+      success_url: `${baseUrl}success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${baseUrl}cancel`,
       payment_method_types: ['card'],
       line_items: checkoutItems,
       mode: 'payment',
