@@ -11,7 +11,7 @@ Week 2 personal project @lacapsule.academy
 - Stripe API
 
 ## Overview
-Create an online from scratch
+Create an online shop from scratch
 - Responsive intergration of user interfaces with Bootstrap 4
 - Manage product list
 - Add cart features (add product, modify quantity, delete product...)
